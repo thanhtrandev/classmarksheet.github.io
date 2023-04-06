@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./grid.css"> 
+    <script type="text/javascript" src="./Jquery/jquery-3.6.0.min.js"></script>
+    <title>Tính điểm</title>
+</head>
+<body class="grid wide">
+
+    <h1>CLASS MARKSHEET</h1><br>
+
+    <div>
+        <form id="form-mark">
+            <div class="row">
+            <label class="col l-3 c-3">Họ tên:</label>
+            <input class="col l-9 c-9" type="text" id="fname" name="ten"><br><br>
+            </div>
+            
+            <div class="row">
+            <label class="col l-3 c-3">Điểm toán:</label>
+            <input class="col l-9 c-9" type="number" id="mathPoints" name="toan"><br><br>
+            </div> 
+
+            <div class="row">
+            <label class="col l-3 c-3">Điểm lý:</label>
+            <input class="col l-9 c-9" type="number" id="physicalPoints" name="ly"><br><br>
+            </div>
+
+            <div class="row">
+            <label class="col l-3 c-3">Điểm hóa:</label>
+            <input class="col l-9 c-9" type="number" id="chemistryPoints" name="hoa"><br><br>
+            </div>
+            <br><br>
+
+            <button id="addPoints" type="button" class="button-mark" >Nhập</button><br><br>
+
+        </form>
+    </div>  
+
+    <div>
+        <table id="table">
+            <tr>
+                <th style="width: 10%;">STT</th>
+                <th style="width: 30%">Họ Tên</th>
+                <th style="width: 15%;">Toán</th>
+                <th style="width: 15%;">Lý</th>
+                <th style="width: 15%;">Hóa</th>
+                <th style="width: 15%;">Trung bình</th>
+            </tr>
+        </table><br><br>
+    <p class="note">(**) Click vào tiêu đề môn học để sắp xếp điểm số tăng dần.</p><br><br>  
+    <div>
+    <button class="button-mark col" type="button" id="average">Tính điểm trung bình</button><br>
+    <button class="button-mark col" type="button"  id="goodStudents">Xác định học sinh giỏi</button><br>
+   
+    </div>
+    
+    </div>
+
+   
+    <script>
+        var i = 0;
+        $(document).ready(function() {
+
+            $("#addPoints").click(function() {
+                i++;
+                var name = $("#fname").val();
+                var math = $("#mathPoints").val();
+                var physical = $("#physicalPoints").val();
+                var chemistry = $("#chemistryPoints").val();
+                var avg = "?";
+
+                var rowTable = "<tr>" +
+                    "<td>" + i + "</td>" +
+                    "<td>" + name + "</td>" +
+                    "<td>" + math + "</td>" +
+                    "<td>" + physical + "</td>" +
+                    "<td>" + chemistry + "</td>" +
+                    "<td>" + avg + "</td>" +
+                    "</tr>";
+
+                $("#table").append(rowTable);
+
+                $("#fname").val("");
+                $("#mathPoints").val("");
+                $("#physicalPoints").val("");
+                $("#chemistryPoints").val("");
+                avg = "?"
+
+            });
+
+
+            $("#average").click(function() {
+                $("tr").each(function() {
+
+                    var m = $(this).children("td").eq(2).html();
+                    var p = $(this).children("td").eq(3).html();
+                    var c = $(this).children("td").eq(4).html();
+                    var avgPoint = (parseFloat(m) + parseFloat(p) + parseFloat(c)) / 3;
+                    $(this).children("td").eq(5).html(avgPoint.toFixed(1));
+                });
+
+            });
+            $("#goodStudents").click(function() {
+                $("tr").each(function() {
+                    var avg = $(this).children("td").eq(5).html()
+                    if (parseInt(avg) >= 8) {
+                        $(this).css('backgroundColor', 'red');
+                    };
+                });
+            });
+
+            //////
+
+            $('th').click(function(){
+                    var table = $(this).parents('table').eq(0)
+                    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+                        this.asc = !this.asc
+                    if (!this.asc){rows = rows.reverse()}
+                    for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+            })
+            function comparer(index) {
+                    return function(a, b) {
+                    var valA = getCellValue(a, index), valB = getCellValue(b, index)
+                    return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+                }
+            }
+            function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+
+            var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+            for (let i=1; i<nRows; i++) {
+                this.eq(0).html = i;
+
+            }
+        });
+    </script>
+    
+</body>
+
+</html>
+                        
+            
+
